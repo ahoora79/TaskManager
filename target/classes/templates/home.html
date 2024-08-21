@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Tasks</title>
+    <style>
+        /* General styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            position: relative; /* To position header and logout */
+        }
+
+        /* Welcome header styling */
+        .welcome-header {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        /* Logout button styling */
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Layout: Split page into left and right sections */
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 60px; /* Adjust for the space taken by header */
+        }
+
+        .left, .right {
+            width: 48%;
+            padding: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Form styling */
+        form {
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .left, .right {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1 class="welcome-header">Welcome, <span th:text="${username}">User</span>!</h1>
+<button class="logout-btn" onclick="window.location.href='http://localhost:8080/logout/th:text=${username}'">Logout</button>
+
+<div class="container">
+    <!-- Left section: Task list -->
+    <div class="left">
+        <h2>Your Tasks</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="task-table-body">
+            <!-- Tasks inserted here -->
+            </tbody>
+        </table>
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Right section: Task creation form -->
+    <div class="right">
+        <h2>Create a New Task</h2>
+        <form id="create-task-form">
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" required/>
+            <br/>
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" required></textarea>
+            <br/>
+            <label for="status">Status:</label>
+            <input type="text" name="status" id="status" required/>
+            <br/>
+            <button type="submit">Create Task</button>
+        </form>
+        <br>
+        <form id="update-task-form" style="display:none;">
+            <h2>Update Task</h2>
+
+            <label for="update-title">Title:</label>
+            <input type="text" name="title" id="update-title" required disabled />
+            <br/>
+            <label for="update-description">Description:</label>
+            <textarea name="description" id="update-description" required disabled></textarea>
+            <br/>
+            <label for="update-status">Status:</label>
+            <select name="status" id="update-status" required>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+            </select>
+            <br/>
+            <button type="submit">Update Task</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const userId = '[[${username}]]';
+    const tasksPerPage = 3;
+    let currentPage = 1;
+    let tasks = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const taskTableBody = document.getElementById("task-table-body");
+        const pagination = document.getElementById("pagination");
+        const createTaskForm = document.getElementById("create-task-form");
+
+        // Fetch and display tasks from the API
+        async function fetchTasks() {
+            try {
+                const response = await fetch(`http://localhost:8080/tasks/${userId}`);
+                tasks = await response.json();
+                renderTasks();
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        }
+
+        // Render tasks for the current page
+        function renderTasks() {
+            taskTableBody.innerHTML = ""; // Clear existing rows
+            const start = (currentPage - 1) * tasksPerPage;
+            const end = start + tasksPerPage;
+            const tasksToShow = tasks.slice(start, end);
+
+            tasksToShow.forEach(task => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${task.title}</td>
+                    <td>${task.description}</td>
+                    <td>${new Date(task.localDate).toLocaleDateString()}</td>
+                    <td>${task.status}</td>
+                    <td>
+                        <button onclick="updateTask('${task.title}', '${task.description}', '${task.status}', ${task.id})">Update</button>
+                        <button onclick="deleteTask(${task.id})">Delete</button>
+                    </td>
+                `;
+                taskTableBody.appendChild(row);
+            });
+
+            renderPagination();
+        }
+
+        // Render pagination buttons
+        function renderPagination() {
+            pagination.innerHTML = ""; // Clear existing buttons
+            const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement("button");
+                button.innerText = i;
+                button.classList.toggle("active", i === currentPage);
+                button.onclick = () => {
+                    currentPage = i;
+                    renderTasks();
+                };
+                pagination.appendChild(button);
+            }
+        }
+
+        // Handle task creation
+        createTaskForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(createTaskForm);
+            const taskData = {
+                title: formData.get("title"),
+                description: formData.get("description"),
+                status: formData.get("status"),
+                username: userId,
+                localDate: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch("http://localhost:8080/tasks", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(taskData)
+                });
+
+                if (response.ok) {
+                    fetchTasks(); // Refresh the task list
+                    createTaskForm.reset();
+                } else {
+                    console.error("Error creating task:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error creating task:", error);
+            }
+        });
+
+        // Update and delete functions (from your previous code) should be here
+        // Update a task
+        window.updateTask = function(title, description, status, taskId) {
+            // Populate the form fields with the selected task's data
+            document.getElementById("update-title").value = title;
+            document.getElementById("update-description").value = description;
+            document.getElementById("update-status").value = status;
+
+            // Disable title and description fields to prevent modification
+            document.getElementById("update-title").disabled = true;
+            document.getElementById("update-description").disabled = true;
+
+            // Show the update form
+            document.getElementById("update-task-form").style.display = "block";
+
+            // Update task form submission
+            const updateTaskForm = document.getElementById("update-task-form");
+            updateTaskForm.onsubmit = async function(event) {
+                event.preventDefault();
+
+                // Only update the status
+                const updatedTask = {
+                    title: title, // Keep the original title
+                    description: description, // Keep the original description
+                    status: document.getElementById("update-status").value,
+                    localDate: new Date().toISOString() // Keep the current date
+                };
+
+                try {
+                    const response = await fetch(`http://localhost:8080/tasks/${taskId}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(updatedTask)
+                    });
+
+                    if (response.ok) {
+                        fetchTasks(); // Refresh the task list
+                        updateTaskForm.reset(); // Reset the form
+                        updateTaskForm.style.display = "none"; // Hide the form after update
+                    } else {
+                        console.error("Error updating task:", response.statusText);
+                    }
+                } catch (error) {
+                    console.error("Error updating task:", error);
+                }
+            };
+        };
+        // Delete a task
+        window.deleteTask = async function(taskId) {
+            try {
+                const response = await fetch(`http://localhost:8080/tasks/${taskId}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok) {
+                    fetchTasks(); // Refresh the task list
+                } else {
+                    console.error("Error deleting task:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error deleting task:", error);
+            }
+        };
+
+        // Initial fetch of tasks
+        fetchTasks();
+    });
+</script>
+</body>
+</html>

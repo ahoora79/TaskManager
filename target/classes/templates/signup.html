@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <style>
+    body {
+      background-color: #87ceeb; /* Soft blue background */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px; /* Space between title and form */
+    }
+
+    form {
+      background-color: #f0f8ff; /* Off-white background for the form */
+      padding: 20px;
+      border-radius: 15px; /* Rounded corners */
+      width: 350px; /* Slightly wider than the login form */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow for depth */
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px 20px; /* More padding for larger touch targets */
+      margin-top: 5px;
+      border: 1px solid #ddd; /* Softer border */
+      border-radius: 5px; /* Rounded corners */
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff; /* Vibrant blue */
+      color: white;
+      padding: 14px 24px; /* Larger padding for easier clicking */
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer;
+      font-size: 16px; /* Bigger text for visibility */
+    }
+
+    button:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+    }
+  </style>
+</head>
+<body>
+<h1>Sign Up Page</h1>
+<form name="signupForm" method="post" action="/signup">
+  <br>
+  <label for="username">Username:</label>
+  <input id="username" name="username" type="text" />
+  <br>
+  <label for="password">Password:</label>
+  <input id="password" name="password" type="password" />
+  <br>
+  <label for="confirmPassword">Confirm Password:</label>
+  <input id="confirmPassword" name="confirmPassword" type="password" />
+  <br>
+  <br>
+  <button type="submit">Sign Up!</button>
+</form>
+</body>
+</html>
