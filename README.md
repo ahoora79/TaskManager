@@ -20,6 +20,9 @@ docker-compose bulild
 ```
 docker-compose up
 ```
+Now all services are running : 
+<img width="666" alt="image" src="https://github.com/user-attachments/assets/ca051636-2541-48ac-98f2-d63cd48966ca">
+
 Finally, access the user page at (I created a task , then updating):
 
 ![alt text](image.png)
