@@ -1,0 +1,14 @@
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\controllers\AuthController.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\controllers\HomeController.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\controllers\TaskController.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\entities\Task.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\entities\User.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\exceptions\IncorrectPassword.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\exceptions\NotExistentUser.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\exceptions\UsernameAlreadyTaken.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\filters\AuthenticationFilter.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\filters\WebConfig.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\repositories\TaskRepository.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\repositories\UserRepository.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\services\UserService.java
+C:\Users\Admin\Desktop\taskmanager\TaskManager\src\main\java\taskmanager\taskmanager\TaskManagerApplication.java

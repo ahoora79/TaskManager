@@ -1,0 +1,12 @@
+taskmanager\taskmanager\TaskManagerApplication.class
+taskmanager\taskmanager\entities\User.class
+taskmanager\taskmanager\repositories\UserRepository.class
+taskmanager\taskmanager\repositories\TaskRepository.class
+taskmanager\taskmanager\controllers\HomeController.class
+taskmanager\taskmanager\exceptions\NotExistentUser.class
+taskmanager\taskmanager\exceptions\IncorrectPassword.class
+taskmanager\taskmanager\entities\Task.class
+taskmanager\taskmanager\exceptions\UsernameAlreadyTaken.class
+taskmanager\taskmanager\controllers\TaskController.class
+taskmanager\taskmanager\controllers\AuthController.class
+taskmanager\taskmanager\services\UserService.class

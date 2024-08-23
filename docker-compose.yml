@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: taskmanager_app
+    ports:
+      - "8080:8080"  # Exposing port 8080 for the app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://taskmanager-postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=shiri1399
+      - SPRING_REDIS_HOST=redis
+    depends_on:
+      - taskmanager-postgres
+      - redis
+
+  taskmanager-postgres:
+    image: postgres:15-alpine
+    container_name: taskmanager-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: shiri1399
+    ports:
+      - "5432:5432"  # Exposing PostgreSQL on port 5432
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"  # Exposing Redis on port 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
